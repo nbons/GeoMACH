@@ -13,7 +13,7 @@ from GeoMACH.PGM.core.PGMobject import PGMobject
 class PGMparameter(PGMobject):
 
     def __init__(self, num_u, num_v,
-                 pos_u=None, pos_v=None, 
+                 pos_u=None, pos_v=None,
                  order_u=None, order_v=None):
         """
         Parameters
@@ -30,13 +30,13 @@ class PGMparameter(PGMobject):
         """
         super(PGMparameter, self).__init__()
 
-        self._pos = {'u': numpy.array(pos_u)
+        self._pos = {'u': numpy.array(pos_u) / pos_u[-1]
                      if pos_u is not None
                      else numpy.linspace(0, 1, num_u),
-                     'v': numpy.array(pos_v)
+                     'v': numpy.array(pos_v) / pos_v[-1]
                      if pos_v is not None
                      else numpy.linspace(0, 1, num_v)}
-        self._order = {'u': order_u if order_u is not None 
+        self._order = {'u': order_u if order_u is not None
                        else min(2, num_u),
                        'v': order_v if order_v is not None
                        else min(2, num_v)}
@@ -52,7 +52,7 @@ class PGMparameter(PGMobject):
         self._num_pt['v'] = num_v
 
     def val(self, val):
-        val = numpy.array(val).reshape(self._shape, 
+        val = numpy.array(val).reshape(self._shape,
                                        order='F')
         self.vec_data['param'][:] = val
 
@@ -66,7 +66,7 @@ class PGMparameter(PGMobject):
 
         nnz = num_pt['u'] * num_pt['v'] * order['u'] * order['v']
         vals, rows, cols \
-            = PGMlib.computebspline(nnz, 
+            = PGMlib.computebspline(nnz,
                                     order['u'], order['v'],
                                     num_cp['u'], num_cp['v'],
                                     num_pt['u'], num_pt['v'],

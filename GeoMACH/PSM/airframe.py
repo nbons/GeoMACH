@@ -70,7 +70,7 @@ class Airframe(object):
         f.write('\n')
 
     def write2TecFEquads(self, filename, zones, variables=['x','y','z'], title="GeoMACH PSM output"):
-        f = self.writeTecHeader(filename,title,variables) 
+        f = self.writeTecHeader(filename,title,variables)
         for z in range(len(zones)):
             name, nodes, quads = zones[z]
             f.write('ZONE T=\"' + name +'\",')
@@ -81,9 +81,9 @@ class Airframe(object):
                 self.writeLine(f, nodes[i,:])
             for i in range(quads.shape[0]):
                 self.writeLine(f, quads[i,:])
-        f.close()  
+        f.close()
 
-    def preview(self, filename):
+    def startPreview(self, filename):
         self.preview = []
 
         self.computePreviewSurfaces()
@@ -200,7 +200,7 @@ class Airframe(object):
         surf_edge[:, 1, 1] = surf_ptrs[:, 2, 1]
 
         return surf_edge
-        
+
     def computeFaceDimensions(self):
         geometry = self.geometry
         bse = geometry._bse
@@ -219,7 +219,7 @@ class Airframe(object):
                 groupLengths[:], groupCount[:] = PSMlib.addgrouplengths(ni, nj, nsurf, nedge, ngroup, surf_indices+1, surf_edge, edge_group, self.surfEdgeLengths, groupLengths, groupCount)
 
         groupLengths = groupLengths / groupCount
-                 
+
         faceDims = OrderedDict()
         for comp in geometry.comps.values():
             faceDimsComp = OrderedDict()
@@ -236,7 +236,7 @@ class Airframe(object):
         geometry = self.geometry
         nsurf = bse._num['surf']
 
-        faceDims = {}    
+        faceDims = {}
         for comp in geometry.comps.values():
             faceDimsComp = []
             jdim0 = numpy.zeros(comp.faces.values()[0]._num_surf['v']+1)
@@ -300,7 +300,7 @@ class Airframe(object):
                     mv = bse.get_bspline_option('num_cp', surf, 'v')
                     nu = bse.get_bspline_option('num_pt', surf, 'u')
                     nv = bse.get_bspline_option('num_pt', surf, 'v')
-                    
+
                     for u in range(mu):
                         for v in range(mv):
                             bse.vec['cp_str'](surf)[u, v, :] = [u/(mu-1), v/(mv-1), 0]
@@ -461,7 +461,7 @@ class Airframe(object):
                             if comp._name=='lw' and face._name=='upp' and i==0 and j==2:
                                 output = True
                             nodes, quads = quad.mesh(self.maxL, self.surfEdgeLengths[surf,:,:], output, output)
-                            
+
                             mu = bse.get_bspline_option('num_cp', surf, 'u')
                             mv = bse.get_bspline_option('num_cp', surf, 'v')
                             nu = bse.get_bspline_option('num_pt', surf, 'u')
@@ -479,8 +479,7 @@ class Airframe(object):
                             bse.compute_projection('temp', P0, [surf], ndim=3)
                             B = bse.jac['d(temp)/d(cp_str)']
 
-                            name = comp._name + ':' + str(face._name) + ':' + str(i) + ':' + str(j)
-
+                            name = '{}:{}:{:03d}:{:03d}'.format(comp._name, face._name, i, j)
                             self.surfaceNames.append(name)
                             B0.append(B)
                             nnode0.append(nnode0[-1] + P0.shape[0])
@@ -565,7 +564,7 @@ class Airframe(object):
                     mv = bse.get_bspline_option('num_cp', surf, 'v')
                     nu = bse.get_bspline_option('num_pt', surf, 'u')
                     nv = bse.get_bspline_option('num_pt', surf, 'v')
-                    
+
                     for u in range(mu):
                         for v in range(mv):
                             bse.vec['cp_str'](surf)[u, v, :] = [u/(mu-1), v/(mv-1), 0]

@@ -75,13 +75,13 @@ def writeBDF(filename, nodes, quads, symm, quad_groups, group_names,
             write(' ',l=16)
             write('0',l=16)
             write(' ',l=8)
-            write('\n')            
+            write('\n')
 
     for i in range(quads.shape[0]):
         write('CQUAD4  ')
         write(str(i+1),l=8)
-        #write(str(quad_groups[i]+1),l=8)
-        write(str(i+1),l=8)
+        write(str(quad_groups[i]+1),l=8)
+        # write(str(i+1),l=8)
         write(str(node_indices[quads[i,0]-1]),l=8)
         write(str(node_indices[quads[i,1]-1]),l=8)
         write(str(node_indices[quads[i,2]-1]),l=8)
@@ -110,7 +110,7 @@ def writeBDF(filename, nodes, quads, symm, quad_groups, group_names,
             write('%.8E' % new_vcoord[imin],l=16)
             #write(' ',l=24)
             write('\n')
-            
+
 
     for i in range(nodes.shape[0]):
         if symm[i] and used[i]:
