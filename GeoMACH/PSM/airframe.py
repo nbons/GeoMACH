@@ -282,7 +282,7 @@ class Airframe(object):
         ncp = bse._size['cp_str']
 
         quads, Wa = PSMlib.computepreviewmemberweights(nmem, 4*nmem, self.membersFlt)
-        linW = numpy.linspace(0,4*nmem-1,4*nmem)
+        linW = numpy.linspace(0,4*nmem-1,4*nmem, dtype='int')
 
         B0 = scipy.sparse.csr_matrix((4*nmem,ncp))
         for src in range(4):
@@ -547,7 +547,7 @@ class Airframe(object):
                 idims, jdims = self.faceDims[comp._name][face._name]
                 PSMlib.computememberlocalcoords(comp._num+1, face._num+1, ni, nj, nnode, idims, jdims, surf_indices+1, nodesInt, nodesFlt)
 
-        linW = numpy.linspace(0,nnode-1,nnode)
+        linW = numpy.linspace(0,nnode-1,nnode, dtype='int')
         B0 = scipy.sparse.csr_matrix((nnode,ncp))
         for src in range(4):
             W = scipy.sparse.csr_matrix((nodesFlt[:,src,0],(linW,linW)))
